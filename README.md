@@ -19,6 +19,7 @@ Jason L. Stein
 Michael I. Love\*
 William Valdar\*.
 "Probabilistic classification of gene-by-treatment interactions on molecular count phenotypes."
+doi: https://doi.org/10.1101/2024.08.03.605142
 (\* These authors contributed equally to this work.)
 
 ## Overview
