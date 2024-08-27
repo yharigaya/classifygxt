@@ -951,13 +951,14 @@ get_sign <- function(fit) {
                 names %>%
                 strsplit(",") %>%
                 unlist
-            if ("b1" %in% names(par) && par["b1"] < 0) {
+            beta <- min.mat[j, ]
+            if (beta[1] == 1 && par["b1"] < 0) {
                 model[1] <- "-1"
             }
-            if ("b2" %in% names(par) && par["b2"] < 0) {
+            if (beta[2] == 1 && par["b2"] < 0) {
                 model[2] <- "-1"
             }
-            if ("b3" %in% names(par) && par["b3"] < 0) {
+            if (beta[3] == 1 && par["b3"] < 0) {
                 model[3] <- "-1"
             }
             model <- paste(model, collapse=",")
@@ -971,13 +972,14 @@ get_sign <- function(fit) {
                 names %>%
                 strsplit(",") %>%
                 unlist
-            if ("b1" %in% names(par) && par["b1"] < 0) {
+            beta <- min.mat[j, ]
+            if (beta[1] == 1 && par["b1"] < 0) {
                 model[1] <- "-1"
             }
-            if ("b2" %in% names(par) && par["b2"] < 0) {
+            if (beta[2] == 1 && par["b2"] < 0) {
                 model[2] <- "-1"
             }
-            if ("b3" %in% names(par) && par["b3"] < 0) {
+            if (beta[3] == 1 && par["b3"] < 0) {
                 model[3] <- "-1"
             }
             model <- paste(model, collapse=",")
