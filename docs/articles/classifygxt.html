@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">classifygxt</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.2</span>
       </span>
     </div>
 
@@ -293,9 +293,9 @@ used.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">(</span><span class="va">pp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_pp.html">get_pp</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;        0,0,0        1,0,0        0,1,0        1,1,0        0,0,1        1,0,1 </span></span>
-<span><span class="co">#&gt; 3.848884e-31 3.786639e-13 2.710346e-25 6.229057e-01 8.811563e-19 6.447401e-12 </span></span>
+<span><span class="co">#&gt; 2.381904e-31 3.102070e-13 1.859044e-25 6.219652e-01 6.612267e-19 5.423350e-12 </span></span>
 <span><span class="co">#&gt;        0,1,1        1,1,1 </span></span>
-<span><span class="co">#&gt; 4.816906e-14 3.770943e-01</span></span></code></pre></div>
+<span><span class="co">#&gt; 3.940914e-14 3.780348e-01</span></span></code></pre></div>
 <p>Note that, in this particular example, the highest posterior
 probability is assigned to the fourth model <code>"1,1,0"</code>, even
 though the data-generating model is “<code>1,1,1</code>”. However, we
@@ -401,7 +401,7 @@ BMS</strong> above). From the BMS result for a feature-SNP pair, the
 be extracted as follows.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">(</span><span class="va">ln.p.y</span> <span class="op">&lt;-</span> <span class="va">res</span><span class="op">$</span><span class="va">ln.p.y</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] -252.8906</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] -257.3321</span></span></code></pre></div>
 <p>Since error bounds for Laplace approximation are not easily obtained,
 we recommend rerunning MCMC and bridge sampling with optimal
 hyperparameter values for the final result.</p>
@@ -426,7 +426,7 @@ hyperparameter values for the final result.</p>
 <span><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; other attached packages:</span></span>
-<span><span class="co">#&gt; [1] classifygxt_0.0.1 ggplot2_3.4.4    </span></span>
+<span><span class="co">#&gt; [1] classifygxt_0.0.2 ggplot2_3.4.4    </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
 <span><span class="co">#&gt;  [1] matrixStats_0.61.0      fs_1.5.0                fontquiver_0.2.1       </span></span>

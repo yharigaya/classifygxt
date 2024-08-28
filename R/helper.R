@@ -37,9 +37,8 @@ get_obj <- function(param, data, hyper,
         nxh <- (1/2) * sum(R * R / o)
         nxh <- nxh + (1/2) * sum(log(o))
         nxh <- nxh + (1/2) * n * log(2 * pi)
-        nxh <- nxh - dnorm(x=b0, mean=0, sd=phi0 * sigma, log=TRUE)
     }
-
+    nxh <- nxh - dnorm(x=b0, mean=0, sd=phi0 * sigma, log=TRUE)
     if (m1 == 1) {
         nxh <- nxh - dnorm(x=b1, mean=0, sd=phi1 * sigma, log=TRUE)
     }

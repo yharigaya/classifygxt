@@ -1,6 +1,6 @@
 # classifygxt 0.0.2
 
-* Fixed a bug in `get_sign`.
+* Fixed bugs in `get_sign` and `get_map`.
 
 # classifygxt 0.0.1
 
