@@ -1,0 +1,238 @@
+---
+title: "Using ClassifyGxT with TensorQTL"
+author: "Yuriko Harigaya, Michael Love, William Valdar"
+date: "`r format(Sys.Date())`"
+header_includes:
+    - \newcommand{\Expect}{\mathrm{E}}
+    - \newcommand{\Var}{\mathrm{Var}}
+    - \newcommand{\Cov}{\mathrm{Cov}}
+    - \newcommand{\Norm}{\mathrm{N}}
+    - \newcommand{\iid}{\overset{\mathrm{iid}}{\sim}}
+    - \newcommand{\veps}{\varepsilon}
+    - \newcommand{\bveps}{\boldsymbol{\varepsilon}}
+    - \newcommand{\bA}{\mathbf{A}}
+    - \newcommand{\bK}{\mathbf{K}}
+    - \newcommand{\bI}{\mathbf{I}}
+    - \newcommand{\bB}{\mathbf{B}}
+    - \newcommand{\bR}{\mathbf{R}}
+    - \newcommand{\bV}{\mathbf{V}}
+    - \newcommand{\bX}{\mathbf{X}}
+    - \newcommand{\bY}{\mathbf{Y}}
+    - \newcommand{\bZ}{\mathbf{Z}}
+    - \newcommand{\bU}{\mathbf{U}}
+    - \newcommand{\bO}{\mathbf{O}}
+    - \newcommand{\bT}{\mathbf{T}}
+    - \newcommand{\bG}{\mathbf{G}}
+    - \newcommand{\bSigma}{\boldsymbol{\Sigma}}
+    - \newcommand{\bOmega}{\boldsymbol{\Omega}}
+    - \newcommand{\balpha}{\boldsymbol{\alpha}}
+    - \newcommand{\bbeta}{\boldsymbol{\beta}}
+    - \newcommand{\bmu}{\boldsymbol{\mu}}
+    - \newcommand{\btheta}{\boldsymbol{\theta}}
+    - \newcommand{\bgamma}{\boldsymbol{\gamma}}
+    - \newcommand{\bpsi}{\boldsymbol{\psi}}
+    - \newcommand{\bphi}{\boldsymbol{\phi}}
+    - \newcommand{\bnu}{\boldsymbol{\nu}}
+    - \newcommand{\bu}{\mathbf{u}}
+    - \newcommand{\bv}{\mathbf{v}}
+    - \newcommand{\bw}{\mathbf{w}}
+    - \newcommand{\bx}{\mathbf{x}}
+    - \newcommand{\by}{\mathbf{y}}
+    - \newcommand{\bz}{\mathbf{z}}
+    - \newcommand{\bk}{\mathbf{k}}
+    - \newcommand{\bm}{\mathbf{m}}
+    - \newcommand{\bnull}{\mathbf{0}} 
+    - \newcommand{\bone}{\mathbf{1}}
+output: rmarkdown::html_vignette
+bibliography: ref.bib
+vignette: >
+  %\VignetteIndexEntry{Using ClassifyGxT with TensorQTL}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse=TRUE,
+  comment="#>"
+)
+```
+
+# Introduction
+
+This vignette demonstrates how to format input data for ClassifyGxT from example input/output data for a widely used program for expression QTL mapping, [TensorQTL](https://github.com/broadinstitute/tensorqtl). 
+The procedure described here focuses on data without repeated measurements per donor (e.g., gene expression data from clinical samples).
+For analyzing data with repeated measurements (e.g., molecular phenotypes from *in-vitro* cell systems), example code can be found at https://bitbucket.org/steinlabunc/wnt-rqtls and https://github.com/yharigaya/classifygxt-paper. 
+
+Since the demonstration relies on large external data, the code in this vignette is not executed.
+To execute the code, it is necessary to download [example data](https://github.com/broadinstitute/tensorqtl/tree/master/example/data) from the TensorQTL website and store them locally.
+Execution also requires installation of [TensorQTL](https://github.com/broadinstitute/tensorqtl) and [PLINK2](https://www.cog-genomics.org/plink/2.0/).
+
+# Data preprocessing
+
+We recommend processing molecular count data as illustrated in steps 1-6 of [Data preprocessing](https://yharigaya.github.io/classifygxt/articles/classifygxt.html#data-preprocessing) prior to running TensorQTL.
+<!-- If linear regression is used for BMS, variance-stabilizing transformations other than $\log$ transformation (e.g., VST from the DESeq2 package) can be used. -->
+
+# Running TensorQTL
+
+In this section, we briefly illustrate how to run interaction QTL mapping using TensorQTL prior to running ClassifyGxT.
+<!-- Note that it is also possible to run interaction QTL mapping in two steps as in (refs). (Is it possible to pass a list of feature-SNP pairs?) -->
+See the instruction on [TensorQTL](https://github.com/broadinstitute/tensorqtl) for details.
+
+## Interaction QTL mapping in general
+
+We use the following input data for performing interaction QTL mapping using TensorQTL in a way that is compatible with ClassifyGxT. 
+
+- PLINK2 genotype files (`.pgen`, `.psam`, `.pvar`)
+- Molecular phenotypes file: A tab-delimited file of processed gene expression data (or other molecular phenotypes) with rows and columns representing gene (or feature) IDs and sample IDs, respectively.
+- Covariates file: A tab-delimited file of covariates with rows and columns representing covariate names and sample IDs, respectively. The covariates include molecular phenotype PCs (from [step 6](https://yharigaya.github.io/classifygxt/articles/classifygxt.html#data-preprocessing)) and, optionally, other nuisance factors (see [step 5](https://yharigaya.github.io/classifygxt/articles/classifygxt.html#data-preprocessing)).
+- Interactions file: A tab-delimited file of the independent variable of interest (e.g., treatment conditions coded as ${1, 2}$). The first and second columns must contain sample IDs and the treatment condition variable, respectively. A header is not needed.
+
+In general, the following code, taken from the TensorQTL instruction, performs interaction mapping.
+
+```{bash, eval=FALSE}
+python3 -m tensorqtl ${plink_prefix_path} ${expression_bed} ${prefix} \
+    --covariates ${covariates_file} \
+    --interaction ${interactions_file} \
+    --best_only \
+    --mode cis_nominal
+```
+
+The code will generate an output file, `${prefix}.cis_qtl_top_assoc.txt.gz`.
+The `plink_prefix_path` variable must be the path to the PLINK2 genotype files. That is, the paths to the files must be `${plink_prefix_path}.pgen`, `${plink_prefix_path}.pvar`, and `${plink_prefix_path}.psam`.
+The `expression_bed`, `covariates_file`, and `interactions_file` variables must be the paths to the molecular phenotypes, covariates, and interactions files, respectively.
+With this particular setting, nominal $P$ values smaller than 0.01 will be included in the output file.
+
+## An example of interaction QTL mapping 
+
+For concreteness, we illustrate the procedure using [example datasets](https://github.com/broadinstitute/tensorqtl/tree/master/example/data) available from the TensorQTL website.
+
+- `GEUVADIS.445_samples.GRCh38.20170504.maf01.filtered.nodup.chr18.pgen`
+- `GEUVADIS.445_samples.GRCh38.20170504.maf01.filtered.nodup.chr18.psam`
+- `GEUVADIS.445_samples.GRCh38.20170504.maf01.filtered.nodup.chr18.pvar`
+- `GEUVADIS.445_samples.covariates.txt`
+- `GEUVADIS.445_samples.expression.bed.gz`
+
+We assume that the above files are stored in the `input/` directory under the working directory.
+We will save intermediate files in a separate directory, `processed/`.
+The covariate file (`GEUVADIS.445_samples.covariates.txt`) contains 26 covariates including the sex variable (coded as 1 and 2).
+Here, we attempt to map QTLs with gene-by-sex interactions.
+For this purpose, we first create an interaction file, which contains the sample names and the sex variable. 
+In R, the following code can be used.
+<!-- The `in.dir` variable specifies the directory where the input files are stored.
+The `out.dir` variable specifies the directory where the output files will be written. -->
+
+```{r, eval=FALSE}
+library(magrittr)
+
+# read in the data
+covar.file <- "input/GEUVADIS.445_samples.covariates.txt"
+covar <- covar.file %>% read.delim(row.names=1)
+
+# create a data frame
+sample <- colnames(covar)
+value <- covar[26, ] %>%
+    unlist %>%
+    unname %>%
+    as.integer
+int <- data.frame(sample=sample, value=value)
+
+# specify the name of an interactions file
+int.file <- "processed/GEUVADIS.445_samples.interactions.txt")
+
+# write the sex variable to an file
+write.table(
+    int, file=int.file, quote=FALSE, sep="\t",
+    row.names=FALSE, col.names=FALSE)
+```
+
+We next create a new covariate file by removing the sex variable from the covariate file.
+
+```{R, eval=FALSE}
+covar2 <- covar[-26, ]
+
+# specify the name of a new covariates file
+covar2.file <- "processed/GEUVADIS.445_samples.covariates2.txt"
+
+# write to the covariates to a file
+write.table(
+    covar2, file=covar2.file, quote=FALSE, sep="\t",
+    row.names=TRUE, col.names=TRUE)
+```
+
+We then perform interaction QTL mapping by typing the following code in a command-line application.
+
+```{bash, eval=FALSE}
+# specify the input file names
+plink_prefix_path="input/GEUVADIS.445_samples.GRCh38.20170504.maf01.filtered.nodup.chr18"
+expression_bed="input/GEUVADIS.445_samples.expression.bed.gz"
+covariates_file="processed/GEUVADIS.445_samples.covariates2.txt"
+interactions_file="processed/GEUVADIS.445_samples.interactions.txt"
+
+# specify an output prefix
+prefix="processed/GEUVADIS.445_samples"
+
+python3 -m tensorqtl ${plink_prefix_path} ${expression_bed} ${prefix} \
+    --covariates ${covariates_file} \
+    --interaction ${interactions_file} \
+    --best_only \
+    --mode cis_nominal
+```
+
+The result will be saved as `path/to/GEUVADIS.445_samples.cis_qtl_top_assoc.txt.gz`.
+
+```{bash, echo=FALSE, eval=FALSE}
+gzip -cd "processed/GEUVADIS.445_samples.chr18.cis_qtl_top_assoc.txt.gz" | head
+```
+
+# Formatting data for ClassifyGxT
+
+To analyze the interaction QTLs using ClassifyGxT, we first convert the PLINK2 genotype files to a `.traw` file by typing the following code in a command-line application.
+
+```{bash, eval=FALSE}
+out_prefix="processed/GEUVADIS.445_samples.GRCh38.20170504.maf01.filtered.nodup.chr18"
+plink2 --pfile ${plink_prefix_path} --export Av --out ${out_prefix}
+```
+
+<!-- We also extract IDs of genes and SNPs with significant GxT interactions from the output from TensorQTL. -->
+
+<!-- We then preprocess the expression matrix according to `Get started`. -->
+
+Next, in R, we specify the input file names.
+
+```{r, eval=FALSE}
+qtl.file <- "processed/GEUVADIS.445_samples.chr18.cis_qtl_top_assoc.txt.gz"
+geno.file <- "processed/GEUVADIS.445_samples.GRCh38.20170504.maf01.filtered.nodup.chr18.traw"
+pheno.file <- "input/GEUVADIS.445_samples.expression.bed.gz"
+covar.file <- "processed/GEUVADIS.445_samples.covariates2.txt"
+int.file <- "processed/GEUVADIS.445_samples.interactions.txt"
+```
+
+We then attach *classifygxt* and obtain a list object using `format_input()`.
+
+```{r, eval=FALSE}
+library(classifygxt)
+
+input.list <- format_input(
+    qtl=qtl.file, geno=geno.file, pheno=pheno.file,
+    covar=covar.file, int=int.file)
+```
+
+The `input.list` object above is a list of lists, each of which corresponds to a feature-SNP pair and can be used as input for `do_bms()`.
+Depending on the format of the input files, it may be necessary to specify additional input arguments.
+See the function documentation (`?format_input`) for details.
+
+<!-- comment on the column numbers -->
+
+<!-- TO-DO (optional)
+- create a dummy txt file (feature, snp)
+- write a function to process the data (regress, pca, residualize)
+-->
+
+# Session information
+
+```{r}
+sessionInfo()
+```
+
+<!-- # References -->

@@ -63,7 +63,7 @@ knitr::opts_chunk$set(
 The ClassifyGxT software is an implementation of a Bayesian model selection (BMS) framework for classifying GxT interactions.
 The method was developed primarily for molecular count phenotypes, such as RNA-seq and ATAC-seq data, although it can be used for other types of phenotypes.
 
-- The input is a list of feature-SNP pairs for which significant GxT interactions have been identified by the standard response molecular QTL mapping procedure (see @hipsci_consortium_shared_2018 and @matoba_wnt_2023 for example).
+- The input is a list of feature-SNP pairs for which significant GxT interactions have been identified by the standard response molecular QTL mapping procedure (see @hipsci_consortium_shared_2018 and @matoba_stimulating_2024 for example).
 For each of the feature-SNP pairs, individual genotype and phenotype data are required.
 - The main output is the posterior probability for different GxT types. See **Overview** on the main page for the model categories representing the types of GxT interactions.
 - The package provides functions to process a single feature-SNP pair.
@@ -88,11 +88,16 @@ For molecular count phenotypes, the raw count data from sequencing experiments c
 
 - Step 1: make a matrix of feature counts with rows and columns representing features and samples, respectively
 - Step 2: scale the count data by the library size according to @palowitch_estimation_2018
-- Step 3: optionally filter features based on the scaled counts according to @matoba_wnt_2023
+- Step 3: optionally filter features based on the scaled counts according to @matoba_stimulating_2024
 - Step 4: transform using the function $\log(x + 1)$
-- Step 5: regress out the treatment indicator (and optionally other nuisance factors, such as sex and age of the subjects)
+- Step 5: regress out the treatment indicator (and optionally other fixed-effect covariates, such as sex and age of the subjects)
 - Step 6: perform principal component analysis (PCA)
-- Step 7: regress out an appropriate number of PCs from the original, transformed data (from Step 4)
+- Step 7: regress out an appropriate number of PCs (and the same set of fixed-effect covariates as in step 5) from the original, transformed data (from step 4)
+
+Note that ClassifyGxT currently does not accommodate covariates other than the donor or polygenic random effects. 
+Other covariates need to be regressed out prior to performing BMS (step 7). 
+See **Including covariates** for details.
+For determining the number of PCs, see @matoba_stimulating_2024.
 
 # Loading packages
 
@@ -242,7 +247,16 @@ pp.mat <- sapply(X=res.list, FUN=get_pp)
 
 In this case, the output is a matrix that contains rows and columns corresponding to the models and the feature-SNP pairs, respectively.
 
-# Including random effects
+# Including covariates
+
+## Including fixed-effect covariates
+
+In molecular QTL analyses on experimental data, it is important to control for confounding factors, such as molecular phenotype PCs and PEER factors to avoid spurious associations.
+We recommend identifying PCs according to the procedure described in Data preprocessing (steps 1 - 6).
+For computational reasons, ClassifyGxT does not currently accommodate covariates other than the donor or polygenic random effects. The fixed-effect covariates need to be regressed out prior to performing BMS as in @matoba_stimulating_2024. See step 7 in Data preprocessing (link).
+Note that we do not typically consider fixed-effect covariates in simulation experiments.
+
+## Including random effects
 
 In analyses of experimental data, it is ofen desirable to include random effects in the model. 
 To include donor random effects, we first need to run `get_tu_lambda()`.

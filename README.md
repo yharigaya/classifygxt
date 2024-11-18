@@ -13,10 +13,10 @@ See `Get started` and `Reference` for usage instructions.
 
 Yuriko Harigaya, 
 Nana Matoba,
-Brandon D. Le
-Jordan M. Valone
-Jason L. Stein
-Michael I. Love\*
+Brandon D. Le,
+Jordan M. Valone,
+Jason L. Stein,
+Michael I. Love\*,
 William Valdar\*.
 "Probabilistic classification of gene-by-treatment interactions on molecular count phenotypes."
 doi: https://doi.org/10.1101/2024.08.03.605142
@@ -53,6 +53,10 @@ Although we primarily use the $\mathbf{m}$ vector notations to specify the types
 |(1,0,1)|Treatment-altered genotype effect|
 |(0,1,1)|Treatment main effect and treatment-induced genotype effect|
 |(1,1,1)|Genotype and treatment main effects and interaction|
+
+## Data input
+
+ClassifyGxT requires individual genotype and phenotype data for a list of feature-SNP pairs (or SNPs) with significant GxT interactions that have already been identified by a standard method, such as [TensorQTL](https://github.com/broadinstitute/tensorqtl). See `Get started` for the format of input data. See **Using ClassifyGxT with TensorQTL** under `Articles` for an instruction on formatting input data for ClassifyGxT from typical input/output data for [TensorQTL](https://github.com/broadinstitute/tensorqtl). 
 
 ## Installation
 

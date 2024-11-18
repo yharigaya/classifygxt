@@ -45,11 +45,30 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="../articles/tensorqtl.html">Using ClassifyGxT with TensorQTL</a>
+    </li>
+  </ul>
+</li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/yharigaya/classifygxt/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -67,9 +86,9 @@ interactions</h1>
                         <h4 data-toc-skip class="author">Yuriko
 Harigaya, Michael Love, William Valdar</h4>
             
-            <h4 data-toc-skip class="date">2024-08-27</h4>
+            <h4 data-toc-skip class="date">2024-11-18</h4>
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/yharigaya/classifygxt/blob/HEAD/vignettes/classifygxt.Rmd" class="external-link"><code>vignettes/classifygxt.Rmd</code></a></small>
       <div class="hidden name"><code>classifygxt.Rmd</code></div>
 
     </div>
@@ -88,7 +107,7 @@ phenotypes.</p>
 <li>The input is a list of feature-SNP pairs for which significant GxT
 interactions have been identified by the standard response molecular QTL
 mapping procedure (see <span class="citation">HIPSCI Consortium et al.
-(2018)</span> and <span class="citation">Matoba et al. (2023)</span> for
+(2018)</span> and <span class="citation">Matoba et al. (2024)</span> for
 example). For each of the feature-SNP pairs, individual genotype and
 phenotype data are required.</li>
 <li>The main output is the posterior probability for different GxT
@@ -143,23 +162,29 @@ representing features and samples, respectively</li>
 <li>Step 2: scale the count data by the library size according to <span class="citation">Palowitch et al. (2018)</span>
 </li>
 <li>Step 3: optionally filter features based on the scaled counts
-according to <span class="citation">Matoba et al. (2023)</span>
+according to <span class="citation">Matoba et al. (2024)</span>
 </li>
 <li>Step 4: transform using the function <span class="math inline">\(\log(x + 1)\)</span>
 </li>
 <li>Step 5: regress out the treatment indicator (and optionally other
-nuisance factors, such as sex and age of the subjects)</li>
+fixed-effect covariates, such as sex and age of the subjects)</li>
 <li>Step 6: perform principal component analysis (PCA)</li>
-<li>Step 7: regress out an appropriate number of PCs from the original,
-transformed data (from Step 4)</li>
+<li>Step 7: regress out an appropriate number of PCs (and the same set
+of fixed-effect covariates as in step 5) from the original, transformed
+data (from step 4)</li>
 </ul>
+<p>Note that ClassifyGxT currently does not accommodate covariates other
+than the donor or polygenic random effects. Other covariates need to be
+regressed out prior to performing BMS (step 7). See <strong>Including
+covariates</strong> for details. For determining the number of PCs, see
+<span class="citation">Matoba et al. (2024)</span>.</p>
 </div>
 <div class="section level2">
 <h2 id="loading-packages">Loading packages<a class="anchor" aria-label="anchor" href="#loading-packages"></a>
 </h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">classifygxt</span><span class="op">)</span></span></code></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/yharigaya/classifygxt" class="external-link">classifygxt</a></span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="generating-data">Generating data<a class="anchor" aria-label="anchor" href="#generating-data"></a>
@@ -311,8 +336,25 @@ corresponding to the models and the feature-SNP pairs, respectively.</p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="including-random-effects">Including random effects<a class="anchor" aria-label="anchor" href="#including-random-effects"></a>
+<h2 id="including-covariates">Including covariates<a class="anchor" aria-label="anchor" href="#including-covariates"></a>
 </h2>
+<div class="section level3">
+<h3 id="including-fixed-effect-covariates">Including fixed-effect covariates<a class="anchor" aria-label="anchor" href="#including-fixed-effect-covariates"></a>
+</h3>
+<p>In molecular QTL analyses on experimental data, it is important to
+control for confounding factors, such as molecular phenotype PCs and
+PEER factors to avoid spurious associations. We recommend identifying
+PCs according to the procedure described in Data preprocessing (steps 1
+- 6). For computational reasons, ClassifyGxT does not currently
+accommodate covariates other than the donor or polygenic random effects.
+The fixed-effect covariates need to be regressed out prior to performing
+BMS as in <span class="citation">Matoba et al. (2024)</span>. See step 7
+in Data preprocessing (link). Note that we do not typically consider
+fixed-effect covariates in simulation experiments.</p>
+</div>
+<div class="section level3">
+<h3 id="including-random-effects">Including random effects<a class="anchor" aria-label="anchor" href="#including-random-effects"></a>
+</h3>
 <p>In analyses of experimental data, it is ofen desirable to include
 random effects in the model. To include donor random effects, we first
 need to run <code><a href="../reference/get_tu_lambda.html">get_tu_lambda()</a></code>.</p>
@@ -329,6 +371,7 @@ need to run <code><a href="../reference/get_tu_lambda.html">get_tu_lambda()</a><
 effects to accout for the genetic relatedness and popuplation structure.
 See the function documentation (<code><a href="../reference/get_tu_lambda.html">?get_tu_lambda</a></code>) for
 details.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="visualizing-the-results">Visualizing the results<a class="anchor" aria-label="anchor" href="#visualizing-the-results"></a>
@@ -452,15 +495,15 @@ hyperparameter values for the final result.</p>
 <span><span class="co">#&gt; [61] stringi_1.7.4           yaml_2.2.1              pkgbuild_1.2.0         </span></span>
 <span><span class="co">#&gt; [64] grid_4.1.2              hrbrthemes_0.8.0        parallel_4.1.2         </span></span>
 <span><span class="co">#&gt; [67] promises_1.2.0.1        crayon_1.5.1            lattice_0.20-45        </span></span>
-<span><span class="co">#&gt; [70] knitr_1.34              ps_1.6.0                pillar_1.8.1           </span></span>
+<span><span class="co">#&gt; [70] knitr_1.34              ps_1.6.0                pillar_1.9.0           </span></span>
 <span><span class="co">#&gt; [73] codetools_0.2-18        stats4_4.1.2            rstantools_2.4.0       </span></span>
-<span><span class="co">#&gt; [76] crul_1.2.0              glue_1.4.2              evaluate_0.14          </span></span>
+<span><span class="co">#&gt; [76] crul_1.2.0              glue_1.6.2              evaluate_0.14          </span></span>
 <span><span class="co">#&gt; [79] fontLiberation_0.1.0    RcppParallel_5.1.5      vctrs_0.6.2            </span></span>
 <span><span class="co">#&gt; [82] httpuv_1.6.3            Rttf2pt1_1.3.12         gtable_0.3.0           </span></span>
 <span><span class="co">#&gt; [85] purrr_1.0.1             assertthat_0.2.1        cachem_1.0.6           </span></span>
 <span><span class="co">#&gt; [88] xfun_0.26               mime_0.11               xtable_1.8-4           </span></span>
 <span><span class="co">#&gt; [91] coda_0.19-4             later_1.3.0             ragg_1.2.5             </span></span>
-<span><span class="co">#&gt; [94] viridisLite_0.4.0       tibble_3.1.8            memoise_2.0.1          </span></span>
+<span><span class="co">#&gt; [94] viridisLite_0.4.0       tibble_3.2.1            memoise_2.0.1          </span></span>
 <span><span class="co">#&gt; [97] ellipsis_0.3.2          bridgesampling_1.1-2</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -474,11 +517,12 @@ Dougan, and Daniel J. Gaffney. 2018. <span>“Shared Genetic Effects on
 Chromatin and Gene Expression Indicate a Role for Enhancer Priming in
 Immune Response.”</span> <em>Nature Genetics</em> 50 (3): 424–31. <a href="https://doi.org/10.1038/s41588-018-0046-7" class="external-link">https://doi.org/10.1038/s41588-018-0046-7</a>.
 </div>
-<div id="ref-matoba_wnt_2023" class="csl-entry">
-Matoba, Nana, Brandon D Le, Jordan M Valone, Justin M Wolter, Jessica
-Mory, Dan Liang, Nil Aygün, et al. 2023. <span>“Wnt Activity Reveals
-Context-Specific Genetic Effects on Gene Regulation in Neural
-Progenitors.”</span> Preprint. Genetics. <a href="https://doi.org/10.1101/2023.02.07.527357" class="external-link">https://doi.org/10.1101/2023.02.07.527357</a>.
+<div id="ref-matoba_stimulating_2024" class="csl-entry">
+Matoba, Nana, Brandon D. Le, Jordan M. Valone, Justin M. Wolter, Jessica
+T. Mory, Dan Liang, Nil Aygün, et al. 2024. <span>“Stimulating
+<span>Wnt</span> Signaling Reveals Context-Dependent Genetic Effects on
+Gene Regulation in Primary Human Neural Progenitors.”</span> <em>Nature
+Neuroscience</em>, September. <a href="https://doi.org/10.1038/s41593-024-01773-6" class="external-link">https://doi.org/10.1038/s41593-024-01773-6</a>.
 </div>
 <div id="ref-palowitch_estimation_2018" class="csl-entry">
 Palowitch, John, Andrey Shabalin, Yi-Hui Zhou, Andrew B. Nobel, and Fred

@@ -13,6 +13,9 @@
     <loc>/articles/index.html</loc>
   </url>
   <url>
+    <loc>/articles/tensorqtl.html</loc>
+  </url>
+  <url>
     <loc>/authors.html</loc>
   </url>
   <url>
@@ -29,6 +32,9 @@
   </url>
   <url>
     <loc>/reference/format_gp.html</loc>
+  </url>
+  <url>
+    <loc>/reference/format_input.html</loc>
   </url>
   <url>
     <loc>/reference/format_pp.html</loc>

@@ -14,6 +14,7 @@ Authors@R: c(
            role = "aut"))
 Maintainer: Yuriko Harigaya <harigaya@live.unc.edu>	   
 Description: Classify gene-by-treatment (GxT) interactions, taking a list of SNPs with significant GxT as input and returning posterior probabilities of GxT types.
+URL: https://github.com/yharigaya/classifygxt
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
