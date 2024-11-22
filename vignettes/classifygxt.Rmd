@@ -65,7 +65,7 @@ The method was developed primarily for molecular count phenotypes, such as RNA-s
 
 - The input is a list of feature-SNP pairs for which significant GxT interactions have been identified by the standard response molecular QTL mapping procedure (see @hipsci_consortium_shared_2018 and @matoba_stimulating_2024 for example).
 For each of the feature-SNP pairs, individual genotype and phenotype data are required.
-- The main output is the posterior probability for different GxT types. See **Overview** on the main page for the model categories representing the types of GxT interactions.
+- The main output is the posterior probability for different GxT types. See [Overview](https://yharigaya.github.io/classifygxt/#overview) on the main page for the model categories representing the types of GxT interactions.
 - The package provides functions to process a single feature-SNP pair.
 In practice, we recommend running parallel jobs on the computer cluster with appropriate grouping.
 
@@ -73,7 +73,7 @@ In practice, we recommend running parallel jobs on the computer cluster with app
 
 For each feature-SNP pair, a list object containing the following elements needs to be generated:
 
-- `y`: A vector of length $n$ containing preprocessed molecular count phenotypes, where $n$ is the number of samples. See **Data processing** below for preprocessing.
+- `y`: A vector of length $n$ containing preprocessed molecular count phenotypes, where $n$ is the number of samples. See [Data preprocessing](https://yharigaya.github.io/classifygxt/articles/classifygxt.html#data-preprocessing) below for preprocessing.
 - `g`: A vector of length $n$ containing genotypes coded as ${0, 1, 2}$ to represent the number of minor (alternative) alleles or the imputation-based allelic dosage in $[0, 2]$. 
 - `t`: A vector of indicator variables for the treatment.
 - `subject`: An optional character or numeric vector corresponding to the subjects. This is necessary when the model includes donor or polygenic (kinship) random effects.
@@ -96,7 +96,7 @@ For molecular count phenotypes, the raw count data from sequencing experiments c
 
 Note that ClassifyGxT currently does not accommodate covariates other than the donor or polygenic random effects. 
 Other covariates need to be regressed out prior to performing BMS (step 7). 
-See **Including covariates** for details.
+See [Including covariates](https://yharigaya.github.io/classifygxt/articles/classifygxt.html#including-covariates) for details.
 For determining the number of PCs, see @matoba_stimulating_2024.
 
 # Loading packages
@@ -167,7 +167,7 @@ data.list <- make_data(
 
 In this section, we perform BMS using `do_bms()`. 
 For simplicity, we do not model random effects.
-See **Including donor random effects** below for how to include random effects.
+See [Including random effects](https://yharigaya.github.io/classifygxt/articles/classifygxt.html#including-random-effects) below for how to include random effects.
 
 We first specify the "model prior."
 Note that this is an optional argument and that, by default, a uniform prior is used.
@@ -186,7 +186,7 @@ Specifically, we place priors,
   \beta_t \sim \Norm(0, \phi_t^2 \sigma^2), \quad
   \beta_{g \times t} \sim \Norm(0, \phi_{g \times t}^2 \sigma^2).
 \end{equation}
-In practice, we recommend optimizing the values via an empirical Bayes approach (see **Optimizing the effect prior hyperparameters** below).
+In practice, we recommend optimizing the values via an empirical Bayes approach (see [Optimizing the effect prior hyperparameters](https://yharigaya.github.io/classifygxt/articles/classifygxt.html#optimizing-the-effect-prior-hyperparameters) below).
 Here, we set them to the same values as the effect standard deviations in the data-generating models.
 This is a reasonable choice since we set the residual error standard deviation to 1 when generating the data.
 
@@ -198,7 +198,7 @@ phi <- c(phi.g, phi.t, phi.gxt)
 ```
 
 The following code performs BMS for the 71st data using `do_bms()` with nonlinear regression (`fn="nonlinear"`).
-Recall that the 71-80th data were generated based on the eighth model, `"1,1,1"` (see **Generating data** above).
+Recall that the 71-80th data were generated based on the eighth model, `"1,1,1"` (see [Generating data](https://yharigaya.github.io/classifygxt/articles/classifygxt.html#generating-data) above).
 The `method` input argument must be set to either `"mcmc.bs"`, which represents Markov Chain Monte Carlo (MCMC) followed by bridge sampling, or `"map.lap"`, which represents MAP estimation followed by Laplace approximation.
 Although the latter method can be orders of magnitude faster, we recommend using `"mcmc.bs"` for the final results, if possible, since it is not straightforward to obtain error bounds for Laplace approximation.
 
@@ -237,7 +237,7 @@ We can extract the posterior probability of the model as follows.
 ```
 
 Note that, in this particular example, the highest posterior probability is assigned to the fourth model `"1,1,0"`, even though the data-generating model is "`1,1,1`".
-However, we will see that BMS tends to choose the correct models across multiple feature-SNP pairs (**Heatmap of the posterior probability of the models** below). 
+However, we will see that BMS tends to choose the correct models across multiple feature-SNP pairs ([Heatmap of the posterior probability of the models](https://yharigaya.github.io/classifygxt/articles/classifygxt.html#heatmap-of-the-posterior-probability-of-the-models) below). 
 
 The following code can be used to extract the posterior probability from a list object storing results for multiple feature-SNP pairs.
 
@@ -253,7 +253,7 @@ In this case, the output is a matrix that contains rows and columns correspondin
 
 In molecular QTL analyses on experimental data, it is important to control for confounding factors, such as molecular phenotype PCs and PEER factors to avoid spurious associations.
 We recommend identifying PCs according to the procedure described in Data preprocessing (steps 1 - 6).
-For computational reasons, ClassifyGxT does not currently accommodate covariates other than the donor or polygenic random effects. The fixed-effect covariates need to be regressed out prior to performing BMS as in @matoba_stimulating_2024. See step 7 in Data preprocessing (link).
+For computational reasons, ClassifyGxT does not currently accommodate covariates other than the donor or polygenic random effects. The fixed-effect covariates need to be regressed out prior to performing BMS as in @matoba_stimulating_2024. See step 7 in [Data preprocessing](https://yharigaya.github.io/classifygxt/articles/classifygxt.html#data-preprocessing).
 Note that we do not typically consider fixed-effect covariates in simulation experiments.
 
 ## Including random effects
@@ -332,9 +332,9 @@ That is, the MAP model tends to be `"0,0,0"` for the first ten feature-SNP pairs
 
 We recommend optimizing the effect prior hyperparmeters by an empirical Bayes approach.
 In this approach, we obtain the $\phi_g$, $\phi_t$, and $\phi_{g \times t}$ hyperparameter values that maximize the sum of $\log$-transformed marginal likelihood across all feature-SNP pairs that are being analyzed. 
-The most conceptually straightforward method is to perform a grid search (see our manuscript for details).
+The most conceptually straightforward method is to perform a grid search (see [our manuscript](https://yharigaya.github.io/classifygxt/#publication) for details).
 We recommend using a workflow such as [Snakemake](https://snakemake.readthedocs.io/en/stable/).
-For faster computation, we use MAP estimation and Laplace approximation, setting `method="map.lap"` (see **Performing BMS** above).
+For faster computation, we use MAP estimation and Laplace approximation, setting `method="map.lap"` (see [Performing BMS](https://yharigaya.github.io/classifygxt/articles/classifygxt.html#performing-bms) above).
 From the BMS result for a feature-SNP pair, the $\log$ of the marginal likelihood can be extracted as follows.
 
 ```{r}
