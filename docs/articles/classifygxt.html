@@ -86,7 +86,7 @@ interactions</h1>
                         <h4 data-toc-skip class="author">Yuriko
 Harigaya, Michael Love, William Valdar</h4>
             
-            <h4 data-toc-skip class="date">2024-11-18</h4>
+            <h4 data-toc-skip class="date">2024-11-22</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/yharigaya/classifygxt/blob/HEAD/vignettes/classifygxt.Rmd" class="external-link"><code>vignettes/classifygxt.Rmd</code></a></small>
       <div class="hidden name"><code>classifygxt.Rmd</code></div>
@@ -111,12 +111,32 @@ mapping procedure (see <span class="citation">HIPSCI Consortium et al.
 example). For each of the feature-SNP pairs, individual genotype and
 phenotype data are required.</li>
 <li>The main output is the posterior probability for different GxT
-types. See <strong>Overview</strong> on the main page for the model
-categories representing the types of GxT interactions.</li>
+types. See <a href="https://yharigaya.github.io/classifygxt/#overview" class="external-link">Overview</a> on
+the main page for the model categories representing the types of GxT
+interactions.</li>
 <li>The package provides functions to process a single feature-SNP pair.
 In practice, we recommend running parallel jobs on the computer cluster
 with appropriate grouping.</li>
 </ul>
+</div>
+<div class="section level2">
+<h2 id="quick-start">Quick start<a class="anchor" aria-label="anchor" href="#quick-start"></a>
+</h2>
+<p>We first show the minimal steps to run ClassifyGxT. We assume that
+<code>data</code> is a list object, as described in <a href="https://yharigaya.github.io/classifygxt/articles/classifygxt.html#input-data" class="external-link">Input
+data</a>. See <a href="https://yharigaya.github.io/classifygxt/articles/classifygxt.html#performing-bms" class="external-link">Performing
+BMS</a> for setting hyperparameter values.</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># set hyperparameter values</span></span>
+<span><span class="va">phi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.5</span>, <span class="fl">2.0</span>, <span class="fl">1.0</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># perform bms</span></span>
+<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/do_bms.html">do_bms</a></span><span class="op">(</span></span>
+<span>    data<span class="op">=</span><span class="va">data</span>, phi<span class="op">=</span><span class="va">phi</span>,</span>
+<span>    fn<span class="op">=</span><span class="st">"nonlinear"</span>, method<span class="op">=</span><span class="st">"map.lap"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># extract posterior probabilities</span></span>
+<span><span class="va">pp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_pp.html">get_pp</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="input-data">Input data<a class="anchor" aria-label="anchor" href="#input-data"></a>
@@ -127,8 +147,8 @@ elements needs to be generated:</p>
 <li>
 <code>y</code>: A vector of length <span class="math inline">\(n\)</span> containing preprocessed molecular count
 phenotypes, where <span class="math inline">\(n\)</span> is the number
-of samples. See <strong>Data processing</strong> below for
-preprocessing.</li>
+of samples. See <a href="https://yharigaya.github.io/classifygxt/articles/classifygxt.html#data-preprocessing" class="external-link">Data
+preprocessing</a> below for preprocessing.</li>
 <li>
 <code>g</code>: A vector of length <span class="math inline">\(n\)</span> containing genotypes coded as <span class="math inline">\({0, 1, 2}\)</span> to represent the number of
 minor (alternative) alleles or the imputation-based allelic dosage in
@@ -175,14 +195,13 @@ data (from step 4)</li>
 </ul>
 <p>Note that ClassifyGxT currently does not accommodate covariates other
 than the donor or polygenic random effects. Other covariates need to be
-regressed out prior to performing BMS (step 7). See <strong>Including
-covariates</strong> for details. For determining the number of PCs, see
-<span class="citation">Matoba et al. (2024)</span>.</p>
+regressed out prior to performing BMS (step 7). See <a href="https://yharigaya.github.io/classifygxt/articles/classifygxt.html#including-covariates" class="external-link">Including
+covariates</a> for details. For determining the number of PCs, see <span class="citation">Matoba et al. (2024)</span>.</p>
 </div>
 <div class="section level2">
 <h2 id="loading-packages">Loading packages<a class="anchor" aria-label="anchor" href="#loading-packages"></a>
 </h2>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/yharigaya/classifygxt" class="external-link">classifygxt</a></span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -197,12 +216,12 @@ documentation (<code><a href="../reference/make_data.html">?make_data</a></code>
 effects.</p>
 <p>We first specify the number of feature-SNP pairs for each of the
 eight models.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">(</span><span class="va">model.name</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_model_names.html">get_model_names</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "0,0,0" "1,0,0" "0,1,0" "1,1,0" "0,0,1" "1,0,1" "0,1,1" "1,1,1"</span></span></code></pre></div>
 <p>For this demonstration, we only make data for 10 pairs for each
 model.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">num</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">8</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">num</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">model.name</span></span>
 <span><span class="va">num</span></span>
@@ -216,7 +235,7 @@ are based on <code>"0,0,0"</code>, the next ten are based on
 Normal distributions with a zero mean and user-specified standard
 deviations. These values represent “typical” magnitudes of the effects.
 We specify standard deviations of the effects as follows.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sd.g</span> <span class="op">&lt;-</span> <span class="fl">1.5</span> <span class="co"># genotype</span></span>
 <span><span class="va">sd.t</span> <span class="op">&lt;-</span> <span class="fl">2.0</span> <span class="co"># treatment</span></span>
 <span><span class="va">sd.gxt</span> <span class="op">&lt;-</span> <span class="fl">1.0</span> <span class="co"># interaction</span></span>
@@ -225,7 +244,7 @@ We specify standard deviations of the effects as follows.</p>
 magnitude of noise, is set to 1 by default.</p>
 <p>The following code generates a data frame specifying the mapping
 between samples, subjects, and treatment conditions.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">n.sub</span> <span class="op">&lt;-</span> <span class="fl">80</span> <span class="co"># number of subjects</span></span>
 <span><span class="va">anno</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>    subject<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="va">n.sub</span><span class="op">)</span>, each<span class="op">=</span><span class="fl">2</span><span class="op">)</span>,</span>
@@ -239,7 +258,7 @@ between samples, subjects, and treatment conditions.</p>
 <span><span class="co">#&gt; 5       3         0</span></span>
 <span><span class="co">#&gt; 6       3         1</span></span></code></pre></div>
 <p>Now we can generate fake data using <code><a href="../reference/make_data.html">make_data()</a></code>.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data.list</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_data.html">make_data</a></span><span class="op">(</span></span>
 <span>    anno<span class="op">=</span><span class="va">anno</span>, fn<span class="op">=</span><span class="st">"nonlinear"</span>,</span>
 <span>    num<span class="op">=</span><span class="va">num</span>, sd<span class="op">=</span><span class="va">sd</span><span class="op">)</span></span></code></pre></div>
@@ -248,14 +267,14 @@ between samples, subjects, and treatment conditions.</p>
 <h2 id="performing-bms">Performing BMS<a class="anchor" aria-label="anchor" href="#performing-bms"></a>
 </h2>
 <p>In this section, we perform BMS using <code><a href="../reference/do_bms.html">do_bms()</a></code>. For
-simplicity, we do not model random effects. See <strong>Including donor
-random effects</strong> below for how to include random effects.</p>
+simplicity, we do not model random effects. See <a href="https://yharigaya.github.io/classifygxt/articles/classifygxt.html#including-random-effects" class="external-link">Including
+random effects</a> below for how to include random effects.</p>
 <p>We first specify the “model prior.” Note that this is an optional
 argument and that, by default, a uniform prior is used. This
 specification reflects a prior belief that all models are equally
 likely. Here, we explicitly specify the default model prior for
 demonstration purposes.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p.m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">8</span>, <span class="fl">8</span><span class="op">)</span></span></code></pre></div>
 <p>We also specify the “effect prior” by choosing the values of the
 <span class="math inline">\(\phi_g\)</span>, <span class="math inline">\(\phi_t\)</span>, and <span class="math inline">\(\phi_{g \times t}\)</span> hyperparameters, which
@@ -267,12 +286,12 @@ Specifically, we place priors, <span class="math display">\[\begin{equation}
   \beta_t \sim \mathrm{N}(0, \phi_t^2 \sigma^2), \quad
   \beta_{g \times t} \sim \mathrm{N}(0, \phi_{g \times t}^2 \sigma^2).
 \end{equation}\]</span> In practice, we recommend optimizing the values
-via an empirical Bayes approach (see <strong>Optimizing the effect prior
-hyperparameters</strong> below). Here, we set them to the same values as
-the effect standard deviations in the data-generating models. This is a
-reasonable choice since we set the residual error standard deviation to
-1 when generating the data.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+via an empirical Bayes approach (see <a href="https://yharigaya.github.io/classifygxt/articles/classifygxt.html#optimizing-the-effect-prior-hyperparameters" class="external-link">Optimizing
+the effect prior hyperparameters</a> below). Here, we set them to the
+same values as the effect standard deviations in the data-generating
+models. This is a reasonable choice since we set the residual error
+standard deviation to 1 when generating the data.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">phi.g</span> <span class="op">&lt;-</span> <span class="fl">1.5</span> <span class="co"># genotype</span></span>
 <span><span class="va">phi.t</span> <span class="op">&lt;-</span> <span class="fl">2.0</span> <span class="co"># treatment</span></span>
 <span><span class="va">phi.gxt</span> <span class="op">&lt;-</span> <span class="fl">1.0</span> <span class="co"># interaction</span></span>
@@ -280,34 +299,64 @@ reasonable choice since we set the residual error standard deviation to
 <p>The following code performs BMS for the 71st data using
 <code><a href="../reference/do_bms.html">do_bms()</a></code> with nonlinear regression
 (<code>fn="nonlinear"</code>). Recall that the 71-80th data were
-generated based on the eighth model, <code>"1,1,1"</code> (see
-<strong>Generating data</strong> above). The <code>method</code> input
-argument must be set to either <code>"mcmc.bs"</code>, which represents
-Markov Chain Monte Carlo (MCMC) followed by bridge sampling, or
-<code>"map.lap"</code>, which represents MAP estimation followed by
-Laplace approximation. Although the latter method can be orders of
-magnitude faster, we recommend using <code>"mcmc.bs"</code> for the
-final results, if possible, since it is not straightforward to obtain
-error bounds for Laplace approximation.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+generated based on the eighth model, <code>"1,1,1"</code> (see <a href="https://yharigaya.github.io/classifygxt/articles/classifygxt.html#generating-data" class="external-link">Generating
+data</a> above). The <code>method</code> input argument must be set to
+either <code>"mcmc.bs"</code>, which represents Markov Chain Monte Carlo
+(MCMC) followed by bridge sampling, or <code>"map.lap"</code>, which
+represents MAP estimation followed by Laplace approximation. Although
+the latter method can be orders of magnitude faster, we recommend using
+<code>"mcmc.bs"</code> for the final results, if possible, since it is
+not straightforward to obtain error bounds for Laplace
+approximation.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">k</span> <span class="op">&lt;-</span> <span class="fl">71</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data.list</span><span class="op">[[</span><span class="va">k</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/do_bms.html">do_bms</a></span><span class="op">(</span></span>
 <span>    data<span class="op">=</span><span class="va">data</span>, p.m<span class="op">=</span><span class="va">p.m</span>, phi<span class="op">=</span><span class="va">phi</span>,</span>
 <span>    fn<span class="op">=</span><span class="st">"nonlinear"</span>, method<span class="op">=</span><span class="st">"map.lap"</span><span class="op">)</span></span></code></pre></div>
-<p>This returns a list object containing the following elements. See the
-function documentation (<code><a href="../reference/do_bms.html">?do_bms</a></code>) for details.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<p>This returns a list object containing the following elements.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "fn"             "ranef"          "rint"           "p.m"           </span></span>
 <span><span class="co">#&gt; [5] "seed"           "ln.p.y.given.m" "ln.p.y"         "p.m.given.y"   </span></span>
 <span><span class="co">#&gt; [9] "optim.list"</span></span></code></pre></div>
+<ul>
+<li>
+<code>fn</code> - A character string specifying the function.</li>
+<li>
+<code>ranef</code> - A logical.</li>
+<li>
+<code>rint</code> - A logical as to whether the phenotypes have been
+RINT-transformed.</li>
+<li>
+<code>p.m</code> - A vector of hyperparameters of the model
+prior.</li>
+<li>
+<code>seed</code> - A integer specifying a seed fo RNG.</li>
+<li>
+<code>ln.p.y.given.m</code> - A named vector of the log marginal
+likelihood given each model. If method is set to <code>"map.lap"</code>,
+the value is shifted by a constant.</li>
+<li>
+<code>ln.p.y</code> - A scalar value of the log marginal likelihood.
+If method is set to <code>"map.lap"</code>, the value is shifted by a
+constant.</li>
+<li>
+<code>p.m.given.y</code> - A named vector of posterior probability
+of the models.</li>
+<li>
+<code>optim.list</code> - A list of outputs from the optim function
+from the stat package containing MAP estimates and Hessian. This element
+is included only when method is set to <code>"map.lap"</code>.</li>
+</ul>
+<p>See the function documentation (<code><a href="../reference/do_bms.html">?do_bms</a></code>) for more
+details.</p>
 <p>For multiple feature-SNP pairs, we recommend processing the data in
 batches using a workflow such as <a href="https://snakemake.readthedocs.io/en/stable/" class="external-link">Snakemake</a>. Within
-a batch, BMS can be performed in serial or parallel processes.</p>
-<p>For a moderate number of feature-SNP pairs, the following code can be
+a batch, BMS can be performed in serial or parallel processes. For a
+moderate number of feature-SNP pairs, the following code can be
 used.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res.list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span></span>
 <span>    X<span class="op">=</span><span class="va">data.list</span>, FUN<span class="op">=</span><span class="va">do_bms</span>, p.m<span class="op">=</span><span class="va">p.m</span>, phi<span class="op">=</span><span class="va">phi</span>,</span>
 <span>    fn<span class="op">=</span><span class="st">"nonlinear"</span>, method<span class="op">=</span><span class="st">"map.lap"</span><span class="op">)</span></span></code></pre></div>
@@ -315,7 +364,7 @@ used.</p>
 <h3 id="extracting-the-posterior-probability-of-the-models">Extracting the posterior probability of the models<a class="anchor" aria-label="anchor" href="#extracting-the-posterior-probability-of-the-models"></a>
 </h3>
 <p>We can extract the posterior probability of the model as follows.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">(</span><span class="va">pp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_pp.html">get_pp</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;        0,0,0        1,0,0        0,1,0        1,1,0        0,0,1        1,0,1 </span></span>
 <span><span class="co">#&gt; 2.381904e-31 3.102070e-13 1.859044e-25 6.219652e-01 6.612267e-19 5.423350e-12 </span></span>
@@ -325,11 +374,11 @@ used.</p>
 probability is assigned to the fourth model <code>"1,1,0"</code>, even
 though the data-generating model is “<code>1,1,1</code>”. However, we
 will see that BMS tends to choose the correct models across multiple
-feature-SNP pairs (<strong>Heatmap of the posterior probability of the
-models</strong> below).</p>
+feature-SNP pairs (<a href="https://yharigaya.github.io/classifygxt/articles/classifygxt.html#heatmap-of-the-posterior-probability-of-the-models" class="external-link">Heatmap
+of the posterior probability of the models</a> below).</p>
 <p>The following code can be used to extract the posterior probability
 from a list object storing results for multiple feature-SNP pairs.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pp.mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span>X<span class="op">=</span><span class="va">res.list</span>, FUN<span class="op">=</span><span class="va">get_pp</span><span class="op">)</span></span></code></pre></div>
 <p>In this case, the output is a matrix that contains rows and columns
 corresponding to the models and the feature-SNP pairs, respectively.</p>
@@ -349,8 +398,9 @@ PCs according to the procedure described in Data preprocessing (steps 1
 accommodate covariates other than the donor or polygenic random effects.
 The fixed-effect covariates need to be regressed out prior to performing
 BMS as in <span class="citation">Matoba et al. (2024)</span>. See step 7
-in Data preprocessing (link). Note that we do not typically consider
-fixed-effect covariates in simulation experiments.</p>
+in <a href="https://yharigaya.github.io/classifygxt/articles/classifygxt.html#data-preprocessing" class="external-link">Data
+preprocessing</a>. Note that we do not typically consider fixed-effect
+covariates in simulation experiments.</p>
 </div>
 <div class="section level3">
 <h3 id="including-random-effects">Including random effects<a class="anchor" aria-label="anchor" href="#including-random-effects"></a>
@@ -358,11 +408,11 @@ fixed-effect covariates in simulation experiments.</p>
 <p>In analyses of experimental data, it is ofen desirable to include
 random effects in the model. To include donor random effects, we first
 need to run <code><a href="../reference/get_tu_lambda.html">get_tu_lambda()</a></code>.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tu.lambda</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_tu_lambda.html">get_tu_lambda</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></code></pre></div>
 <p>We then use the output as input when running
 <code><a href="../reference/do_bms.html">do_bms()</a></code>.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res.ranef</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/do_bms.html">do_bms</a></span><span class="op">(</span></span>
 <span>    data<span class="op">=</span><span class="va">data</span>, p.m<span class="op">=</span><span class="va">p.m</span>, phi<span class="op">=</span><span class="va">phi</span>,</span>
 <span>    fn<span class="op">=</span><span class="st">"nonlinear"</span>, method<span class="op">=</span><span class="st">"map.lap"</span>,</span>
@@ -383,15 +433,15 @@ details.</p>
 plots, which we call a “GP” plot, for each feature-SNP pair (or SNP). To
 make a GP plot, we first create a list of data frames using
 <code><a href="../reference/format_gp.html">format_gp()</a></code>.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gp.plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/format_gp.html">format_gp</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">data</span>, fit<span class="op">=</span><span class="va">res</span><span class="op">)</span></span></code></pre></div>
 <p>We then create a <code>ggplot2</code> object using
 <code><a href="../reference/make_gp_plot.html">make_gp_plot()</a></code>. The appearance of the plot can be modified
 as usual.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_gp_plot.html">make_gp_plot</a></span><span class="op">(</span>gp<span class="op">=</span><span class="va">gp.plot</span><span class="op">)</span></span>
 <span><span class="va">p1</span></span></code></pre></div>
-<p><img src="classifygxt_files/figure-html/unnamed-chunk-17-1.png" width="384" style="display: block; margin: auto;"></p>
+<p><img src="classifygxt_files/figure-html/unnamed-chunk-18-1.png" width="384" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="generating-a-posterior-probability-pp-plot">Generating a posterior probability (PP) plot<a class="anchor" aria-label="anchor" href="#generating-a-posterior-probability-pp-plot"></a>
@@ -399,15 +449,15 @@ as usual.</p>
 <p>It is also useful to generate a barplot of posterior probability,
 which we call a “PP” plot. To make a PP plot, we first create a data
 frame using <code><a href="../reference/format_pp.html">format_pp()</a></code>.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pp.plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/format_pp.html">format_pp</a></span><span class="op">(</span>fit<span class="op">=</span><span class="va">res</span><span class="op">)</span></span></code></pre></div>
 <p>We then create a <code>ggplot2</code> object using
 <code><a href="../reference/make_pp_plot.html">make_pp_plot()</a></code>. The appearance of the plot can be modified
 as usual.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_pp_plot.html">make_pp_plot</a></span><span class="op">(</span>pp<span class="op">=</span><span class="va">pp.plot</span><span class="op">)</span> </span>
 <span><span class="va">p2</span></span></code></pre></div>
-<p><img src="classifygxt_files/figure-html/unnamed-chunk-19-1.png" width="384" style="display: block; margin: auto;"></p>
+<p><img src="classifygxt_files/figure-html/unnamed-chunk-20-1.png" width="384" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="heatmap-of-the-posterior-probability-of-the-models">Heatmap of the posterior probability of the models<a class="anchor" aria-label="anchor" href="#heatmap-of-the-posterior-probability-of-the-models"></a>
@@ -416,11 +466,11 @@ as usual.</p>
 multiple feature-SNP pairs using <code><a href="../reference/make_heatmap.html">make_heatmap()</a></code>. Note that
 we transpose the matrix using <code><a href="https://rdrr.io/r/base/t.html" class="external-link">t()</a></code> in the following
 code.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_heatmap.html">make_heatmap</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">pp.mat</span><span class="op">)</span><span class="op">)</span> </span>
 <span><span class="va">p3</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position<span class="op">=</span><span class="st">"bottom"</span>,</span>
 <span>           legend.title<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="classifygxt_files/figure-html/unnamed-chunk-20-1.png" width="480" style="display: block; margin: auto;"></p>
+<p><img src="classifygxt_files/figure-html/unnamed-chunk-21-1.png" width="480" style="display: block; margin: auto;"></p>
 <p>As expected, we see that the highest probability tends to be assigned
 to the correct (i.e., data-generating) model. That is, the MAP model
 tends to be <code>"0,0,0"</code> for the first ten feature-SNP pairs in
@@ -435,14 +485,13 @@ so forth.</p>
 empirical Bayes approach. In this approach, we obtain the <span class="math inline">\(\phi_g\)</span>, <span class="math inline">\(\phi_t\)</span>, and <span class="math inline">\(\phi_{g \times t}\)</span> hyperparameter values
 that maximize the sum of <span class="math inline">\(\log\)</span>-transformed marginal likelihood
 across all feature-SNP pairs that are being analyzed. The most
-conceptually straightforward method is to perform a grid search (see our
-manuscript for details). We recommend using a workflow such as <a href="https://snakemake.readthedocs.io/en/stable/" class="external-link">Snakemake</a>. For
+conceptually straightforward method is to perform a grid search (see <a href="https://yharigaya.github.io/classifygxt/#publication" class="external-link">our
+manuscript</a> for details). We recommend using a workflow such as <a href="https://snakemake.readthedocs.io/en/stable/" class="external-link">Snakemake</a>. For
 faster computation, we use MAP estimation and Laplace approximation,
-setting <code>method="map.lap"</code> (see <strong>Performing
-BMS</strong> above). From the BMS result for a feature-SNP pair, the
-<span class="math inline">\(\log\)</span> of the marginal likelihood can
-be extracted as follows.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+setting <code>method="map.lap"</code> (see <a href="https://yharigaya.github.io/classifygxt/articles/classifygxt.html#performing-bms" class="external-link">Performing
+BMS</a> above). From the BMS result for a feature-SNP pair, the <span class="math inline">\(\log\)</span> of the marginal likelihood can be
+extracted as follows.</p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">(</span><span class="va">ln.p.y</span> <span class="op">&lt;-</span> <span class="va">res</span><span class="op">$</span><span class="va">ln.p.y</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] -257.3321</span></span></code></pre></div>
 <p>Since error bounds for Laplace approximation are not easily obtained,
@@ -452,7 +501,7 @@ hyperparameter values for the final result.</p>
 <div class="section level2">
 <h2 id="session-information">Session information<a class="anchor" aria-label="anchor" href="#session-information"></a>
 </h2>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; R version 4.1.2 (2021-11-01)</span></span>
 <span><span class="co">#&gt; Platform: x86_64-apple-darwin17.0 (64-bit)</span></span>

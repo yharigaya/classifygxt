@@ -7,7 +7,7 @@ The method is primarily designed for molecular count phenotypes, such as gene ex
 It takes as input a list of feature-SNP pairs (or SNPs) with significant GxT interactions that have already been identified by a standard method and assigns posterior probability of different types of GxT interactions to each of the feature-SNP pairs (or SNPs).
 See [Overview](https://yharigaya.github.io/classifygxt/#overview) below for the types of GxT interactions.
 
-See `Get started` and `Reference` for usage instructions.
+See [`Get started`](https://yharigaya.github.io/classifygxt/articles/classifygxt.html) and [`Reference`](https://yharigaya.github.io/classifygxt/reference/index.html) for usage instructions.
 
 ## Publication
 
@@ -56,7 +56,7 @@ Although we primarily use the $\mathbf{m}$ vector notations to specify the types
 
 ## Data input
 
-ClassifyGxT requires individual genotype and phenotype data for a list of feature-SNP pairs (or SNPs) with significant GxT interactions that have already been identified by a standard method, such as [TensorQTL](https://github.com/broadinstitute/tensorqtl). See `Get started` for the format of input data. See [Using ClassifyGxT with TensorQTL](https://yharigaya.github.io/classifygxt/articles/tensorqtl.html) under `Articles` for an instruction on formatting input data for ClassifyGxT from typical input/output data for [TensorQTL](https://github.com/broadinstitute/tensorqtl). 
+ClassifyGxT requires individual genotype and phenotype data for a list of feature-SNP pairs (or SNPs) with significant GxT interactions that have already been identified by a standard method, such as [TensorQTL](https://github.com/broadinstitute/tensorqtl). See [`Get started`](https://yharigaya.github.io/classifygxt/articles/classifygxt.html) for the format of input data. See [Using ClassifyGxT with TensorQTL](https://yharigaya.github.io/classifygxt/articles/tensorqtl.html) under `Articles` for an instruction on formatting input data for ClassifyGxT from typical input/output data for [TensorQTL](https://github.com/broadinstitute/tensorqtl). 
 
 ## Installation
 

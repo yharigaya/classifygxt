@@ -69,6 +69,26 @@ For each of the feature-SNP pairs, individual genotype and phenotype data are re
 - The package provides functions to process a single feature-SNP pair.
 In practice, we recommend running parallel jobs on the computer cluster with appropriate grouping.
 
+# Quick start
+
+We first show the minimal steps to run ClassifyGxT. 
+We assume that `data` is a list object, as described in [Input
+data](https://yharigaya.github.io/classifygxt/articles/classifygxt.html#input-data).
+See [Performing BMS](https://yharigaya.github.io/classifygxt/articles/classifygxt.html#performing-bms) for setting hyperparameter values.
+
+```{r, eval=FALSE}
+# set hyperparameter values
+phi <- c(1.5, 2.0, 1.0)
+
+# perform bms
+res <- do_bms(
+    data=data, phi=phi,
+    fn="nonlinear", method="map.lap")
+
+# extract posterior probabilities
+pp <- get_pp(res)
+```
+
 # Input data
 
 For each feature-SNP pair, a list object containing the following elements needs to be generated:
@@ -211,15 +231,25 @@ res <- do_bms(
 ```
 
 This returns a list object containing the following elements.
-See the function documentation (`?do_bms`) for details.
 
 ```{r}
 names(res)
 ```
 
+- `fn` - A character string specifying the function.
+- `ranef` - A logical.
+- `rint` - A logical as to whether the phenotypes have been RINT-transformed.
+- `p.m` - A vector of hyperparameters of the model prior.
+- `seed` - A integer specifying a seed fo RNG.
+- `ln.p.y.given.m` - A named vector of the log marginal likelihood given each model. If method is set to `"map.lap"`, the value is shifted by a constant.
+- `ln.p.y` - A scalar value of the log marginal likelihood. If method is set to `"map.lap"`, the value is shifted by a constant.
+- `p.m.given.y` - A named vector of posterior probability of the models.
+- `optim.list` - A list of outputs from the optim function from the stat package containing MAP estimates and Hessian. This element is included only when method is set to `"map.lap"`.
+
+See the function documentation (`?do_bms`) for more details.
+
 For multiple feature-SNP pairs, we recommend processing the data in batches using a workflow such as [Snakemake](https://snakemake.readthedocs.io/en/stable/).
 Within a batch, BMS can be performed in serial or parallel processes.
-
 For a moderate number of feature-SNP pairs, the following code can be used.
 
 ```{r, warning=FALSE, message=FALSE}
