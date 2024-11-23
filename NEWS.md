@@ -1,6 +1,6 @@
 # classifygxt 0.1.0
 
-* Add `format_input`.
+* Added `format_input`.
 
 # classifygxt 0.0.2
 
