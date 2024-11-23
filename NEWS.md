@@ -1,3 +1,7 @@
+# classifygxt 0.1.0
+
+* Add `format_input`.
+
 # classifygxt 0.0.2
 
 * Fixed bugs in `get_sign` and `get_map`.

@@ -1,6 +1,6 @@
 Package: classifygxt
 Title: ClassifyGxT - classifying gene-by-treatment interactions
-Version: 0.0.2
+Version: 0.1.0
 Authors@R: c(
     person(given = "Yuriko",
            family = "Harigaya",
