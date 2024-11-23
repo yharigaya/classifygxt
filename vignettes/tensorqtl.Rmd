@@ -179,7 +179,7 @@ python3 -m tensorqtl ${plink_prefix_path} ${expression_bed} ${prefix} \
     --mode cis_nominal
 ```
 
-The result will be saved as `path/to/GEUVADIS.445_samples.cis_qtl_top_assoc.txt.gz`.
+The result will be saved as `processed/GEUVADIS.445_samples.cis_qtl_top_assoc.txt.gz`.
 
 ```{bash, echo=FALSE, eval=FALSE}
 gzip -cd "processed/GEUVADIS.445_samples.chr18.cis_qtl_top_assoc.txt.gz" | head
