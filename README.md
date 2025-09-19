@@ -1,7 +1,5 @@
 # ClassifyGxT <img id="classifygxt_logo" alt="classifygxt logo" src="man/figures/classifygxt.png" align="right" width="125"/>
 
-## About
-
 ClassifyGxT is a method for classifying gene-by-treatment (GxT) interactions using Bayesian model selection (BMS).
 The method is primarily designed for molecular count phenotypes, such as gene expression and chromatin accessibility, although it can be used for other types of phenotypes.
 It takes as input a list of feature-SNP pairs (or SNPs) with significant GxT interactions that have already been identified by a standard method and assigns posterior probability of different types of GxT interactions to each of the feature-SNP pairs (or SNPs).

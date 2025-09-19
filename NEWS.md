@@ -1,6 +1,7 @@
 # classifygxt 0.1.1
 
 * Fixed a bug in `make_data`.
+* Changed the input argument `anno` for `make_data`.
 
 # classifygxt 0.1.0
 
