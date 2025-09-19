@@ -1,3 +1,7 @@
+# classifygxt 0.1.1
+
+* Fixed a bug in `make_data`.
+
 # classifygxt 0.1.0
 
 * Added `format_input`.
