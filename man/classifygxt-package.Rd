@@ -11,3 +11,20 @@ A DESCRIPTION OF THE PACKAGE
 \references{
 Stan Development Team (2022). RStan: the R interface to Stan. R package version 2.21.5. https://mc-stan.org
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/yharigaya/classifygxt}
+}
+
+}
+\author{
+\strong{Maintainer}: Yuriko Harigaya \email{harigaya@live.unc.edu}
+
+Authors:
+\itemize{
+  \item Michael Love
+  \item William Valdar
+}
+
+}

@@ -19,7 +19,7 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -46,9 +46,9 @@
   <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
@@ -65,7 +65,7 @@
 <li>
   <a href="https://github.com/yharigaya/classifygxt/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul>
@@ -76,12 +76,12 @@
 </div>
 <!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="contents col-md-9">
 <div class="section level1">
-<div class="page-header"><h1 id="classifygxt">ClassifyGxT<a class="anchor" aria-label="anchor" href="#classifygxt"></a>
+<div class="page-header"><h1 id="classifygxt-">ClassifyGxT <img id="classifygxt_logo" alt="classifygxt logo" src="reference/figures/classifygxt.png" align="right" width="125"><a class="anchor" aria-label="anchor" href="#classifygxt-"></a>
 </h1></div>
 <div class="section level2">
 <h2 id="about">About<a class="anchor" aria-label="anchor" href="#about"></a>
@@ -92,21 +92,23 @@
 <div class="section level2">
 <h2 id="publication">Publication<a class="anchor" aria-label="anchor" href="#publication"></a>
 </h2>
-<p>Yuriko Harigaya, Nana Matoba, Brandon D. Le, Jordan M. Valone, Jason L. Stein, Michael I. Love*, William Valdar*. “Probabilistic classification of gene-by-treatment interactions on molecular count phenotypes.” doi: <a href="https://doi.org/10.1101/2024.08.03.605142" class="external-link uri">https://doi.org/10.1101/2024.08.03.605142</a> (* These authors contributed equally to this work.)</p>
+<p>Yuriko Harigaya, Nana Matoba, Brandon D. Le, Jordan M. Valone, Jason L. Stein, Michael I. Love*, William Valdar*. “Probabilistic classification of gene-by-treatment interactions on molecular count phenotypes” <em>PLoS Genetics</em>, 21(4): e1011561 (2025). <a href="https://doi.org/10.1371/journal.pgen.1011561" class="external-link">doi: 10.1371/journal.pgen.1011561</a></p>
+<p>* These authors contributed equally to this work.</p>
+<p>Code for analyses in the paper can be found <a href="https://github.com/yharigaya/classifygxt-paper" class="external-link">here</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
-<p>In the simplest form, our BMS framework can be described as follows. For <span class="math inline"><em>n</em></span> samples indexed by <span class="math inline"><em>i</em></span>, we consider a linear model shown below. <span class="math inline"><em>y</em><sub><em>i</em></sub></span> is the phenotype, <span class="math inline"><em>g</em><sub><em>i</em></sub></span> is the genotype, and <span class="math inline"><em>t</em><sub><em>i</em></sub></span> is the indicator variable as to whether the sample <span class="math inline"><em>i</em></span> was treated. <span class="math inline"><em>ε</em><sub><em>i</em></sub></span> is the residual error (noise) and is assumed to follow a Normal distributiion with a zero mean and variance <span class="math inline"><em>σ</em><sup>2</sup></span>. <span class="math inline"><em>β</em><sub>0</sub></span> is the intercept. <span class="math inline"><em>β</em><sub><em>g</em></sub></span>, <span class="math inline"><em>β</em><sub><em>t</em></sub></span>, and <span class="math inline"><em>β</em><sub><em>g</em> × <em>t</em></sub></span> are the genotype, treatment, and GxT interaction effects, respectively. We use the <span class="math inline"><em>m</em><sub><em>g</em></sub></span>, <span class="math inline"><em>m</em><sub><em>t</em></sub></span>, and <span class="math inline"><em>m</em><sub><em>g</em> × <em>t</em></sub></span> indicator variables to specify the inclusion and exclusion of the genotype, treatment, and GxT interaction terms, respectively. The <span class="math inline"><strong>m</strong><sub><em>j</em></sub></span> vector refers to the <span class="math inline"><em>j</em></span>-th model (<span class="math inline"><em>j</em> = 1, …, 8</span>). The eight models represent different types of GxT interactions.</p>
+<p>In the simplest form, our BMS framework can be described as follows. For <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math> samples indexed by <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>, we consider a linear model shown below. <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>y</mi><mi>i</mi></msub><annotation encoding="application/x-tex">y_i</annotation></semantics></math> is the phenotype, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>g</mi><mi>i</mi></msub><annotation encoding="application/x-tex">g_i</annotation></semantics></math> is the genotype, and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>t</mi><mi>i</mi></msub><annotation encoding="application/x-tex">t_i</annotation></semantics></math> is the indicator variable as to whether the sample <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math> was treated. <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>ε</mi><mi>i</mi></msub><annotation encoding="application/x-tex">\varepsilon_i</annotation></semantics></math> is the residual error (noise) and is assumed to follow a Normal distributiion with a zero mean and variance <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>σ</mi><mn>2</mn></msup><annotation encoding="application/x-tex">\sigma^2</annotation></semantics></math>. <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mn>0</mn></msub><annotation encoding="application/x-tex">\beta_0</annotation></semantics></math> is the intercept. <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mi>g</mi></msub><annotation encoding="application/x-tex">\beta_g</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mi>t</mi></msub><annotation encoding="application/x-tex">\beta_t</annotation></semantics></math>, and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mrow><mi>g</mi><mo>×</mo><mi>t</mi></mrow></msub><annotation encoding="application/x-tex">\beta_{g \times t}</annotation></semantics></math> are the genotype, treatment, and GxT interaction effects, respectively. We use the <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>m</mi><mi>g</mi></msub><annotation encoding="application/x-tex">m_g</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>m</mi><mi>t</mi></msub><annotation encoding="application/x-tex">m_t</annotation></semantics></math>, and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>m</mi><mrow><mi>g</mi><mo>×</mo><mi>t</mi></mrow></msub><annotation encoding="application/x-tex">m_{g \times t}</annotation></semantics></math> indicator variables to specify the inclusion and exclusion of the genotype, treatment, and GxT interaction terms, respectively. The <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>𝐦</mi><mi>j</mi></msub><annotation encoding="application/x-tex">\mathbf{m}_j</annotation></semantics></math> vector refers to the <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math>-th model (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>j</mi><mo>=</mo><mn>1</mn><mo>,</mo><mi>…</mi><mo>,</mo><mn>8</mn></mrow><annotation encoding="application/x-tex">j = 1, \dots, 8</annotation></semantics></math>). The eight models represent different types of GxT interactions.</p>
 <center>
 <img src="reference/figures/bms.png" align="center" width="600">
 </center>
-<p>To account for the inherent nonlinear relationship between the genotype and the tranformed molecular count phenotype, we use nonlinear regression. The eight models can be formulated in the same way using the <span class="math inline"><strong>m</strong></span> vectors. See our manuscript (<a href="https://yharigaya.github.io/classifygxt/#publication" class="external-link">Publication</a>) for prior specification, posterior computation, and other details.</p>
-<p>Although we primarily use the <span class="math inline"><strong>m</strong></span> vector notations to specify the types of GxT interaction, it is also useful to consider the following nomenclatures.</p>
+<p>To account for the inherent nonlinear relationship between the genotype and the tranformed molecular count phenotype, we use nonlinear regression. The eight models can be formulated in the same way using the <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝐦</mi><annotation encoding="application/x-tex">\mathbf{m}</annotation></semantics></math> vectors. See our manuscript (<a href="https://yharigaya.github.io/classifygxt/#publication" class="external-link">Publication</a>) for prior specification, posterior computation, and other details.</p>
+<p>Although we primarily use the <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝐦</mi><annotation encoding="application/x-tex">\mathbf{m}</annotation></semantics></math> vector notations to specify the types of GxT interaction, it is also useful to consider the following nomenclatures.</p>
 <table class="table">
 <thead><tr class="header">
 <th>
-<span class="math inline"><strong>m</strong></span> vector</th>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝐦</mi><annotation encoding="application/x-tex">\mathbf{m}</annotation></semantics></math> vector</th>
 <th>Nomenclature</th>
 </tr></thead>
 <tbody>
@@ -206,16 +208,16 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
       </footer>
 </div>
 
-  
 
 
-  
+
+
 
   </body>
 </html>

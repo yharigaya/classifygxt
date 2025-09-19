@@ -51,8 +51,8 @@ get_sign_names <- function() {
 #'     containing covariates. This must be the same as the input file
 #'     used for TensorQTL.
 #' @param int A character string specifying the name of the file
-#'     containing the condition variable of interest, coded as {1,
-#'     2}. This must be the same as the input file used for TensorQTL.
+#'     containing the condition variable of interest, coded as 1 and
+#'     2. This must be the same as the input file used for TensorQTL.
 #' @param pheno.col A character string specifying the name of the
 #'     column of \code{qtl} containing the feature IDs.
 #' @param variant.col A character string specifying the name of the
@@ -88,7 +88,7 @@ format_input <- function(qtl, pheno, geno, covar, int,
     qtl <- qtl %>% read.delim
 
     qtl.check <- try(qtl[, pheno.col], silent=TRUE)
-    if (class(qtl.check) != "character") {
+    if (!is.character(qtl.check)) {
         stop("check the `qtl` and `pheno.col` arguments")
     }
 
@@ -128,11 +128,11 @@ format_input <- function(qtl, pheno, geno, covar, int,
     feat.vec <- try(pheno[, feat.col], silent=TRUE)
     snp.vec <- try(geno[, snp.col], silent=TRUE)
 
-    if (class(feat.vec) != "character") {
+    if (!is.character(feat.vec)) {
         stop("check the `pheno` and `feat.col` arguments")
     }
 
-    if (class(snp.vec) != "character") {
+    if (!is.character(snp.vec)) {
         stop("check the `geno` and `snp.col` arguments")
     }
 

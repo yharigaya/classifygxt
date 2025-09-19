@@ -1,8 +1,23 @@
+# check the commit number where this script was last modified
+# suppressPackageStartupMessages(library(tidyverse))
+# suppressPackageStartupMessages(library(reqtlpkg))
+# suppressPackageStartupMessages(library(here))
+
+# devtools::load_all()
+
 num <- rep(1, 8)
+n.sample <- 160
 n.sub <- 80 # number of subjects
 anno <- data.frame(
+    sample=seq_len(n.sample),
     subject=rep(seq_len(n.sub), each=2),
     condition=rep(c(0, 1), times=n.sub))
+# n.data <- 5 # number of data
+# b0 <- 0
+# sigma <- 1
+# seed <- 1
+# a.maf <- 0.05 # maf lower bound
+# b.maf <- 0.5 # maf upper bound
 
 sd.g <- 1.5
 sd.t <- 2.0

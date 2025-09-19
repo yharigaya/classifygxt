@@ -35,8 +35,8 @@ containing covariates. This must be the same as the input file
 used for TensorQTL.}
 
 \item{int}{A character string specifying the name of the file
-containing the condition variable of interest, coded as {1,
-2}. This must be the same as the input file used for TensorQTL.}
+containing the condition variable of interest, coded as 1 and
+2. This must be the same as the input file used for TensorQTL.}
 
 \item{pheno.col}{A character string specifying the name of the
 column of \code{qtl} containing the feature IDs.}

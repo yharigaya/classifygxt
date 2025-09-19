@@ -15,10 +15,10 @@
 #' @param ub.maf A scalar specifying the upper bound of MAF.
 #' @param filter.geno A Boolean variable as to whether to ensure that
 #'     all genotype levels have at least one observation.
-#' @param anno A data frame containing the subjects (character
-#'     strings or integers) and the treatment conditions (0 or 1) in
-#'     the first and second columns, respectively. The columns must be
-#'     named as "subject" and "condition".
+#' @param anno A data frame containing sample IDs (character strings
+#'     or integers), subject IDs (character strings or integers), and
+#'     treatment conditions (0 or 1). The columns must be names as
+#'     "sample", "subject", and "condition".
 #' @param sd A vetor of length three specifying the effect size
 #'     standard deviations.
 #' @param b0 A scalar specifying the intercept.
@@ -29,8 +29,11 @@
 #'     deviation. If \code{ranef} is \code{TRUE}, this is set to sqrt(0.2)
 #'     by default.
 #' @param kinship A matrix containing pairwise genetic relatedness
-#'     between individuals. If \code{ranef} is \code{TRUE}, this is set to
-#'     an identity matrix by default.
+#'     between subjects. The row and column names must match the set of
+#'     unique elements of the "subject" column in "anno" in the
+#'     corresponding order (i.e., \code{unique(anno$subject)}). This is
+#'     set to \code{NULL} by default, in which case the identity matrix is
+#'     used.
 #' @param seed A seed for RNG.
 #'
 #' @return A list of lists containing:
@@ -63,10 +66,6 @@ make_data <- function(num, anno,
 
     set.seed(seed)
 
-    # if (is.null(num)) {
-    #     num <- rep(1000, 8)
-    # }
-
     if (!ranef) {
         if (!is.null(sigma.u)) {
             stop("`ranef` must be set to `TRUE` when `sigma.u` is supplied")
@@ -77,6 +76,7 @@ make_data <- function(num, anno,
     }
 
     # extract info from the anno object
+    sample <- anno$sample
     subject <- anno$subject
     t <- anno$condition
     n <- nrow(anno) # the total number of samples
@@ -91,6 +91,22 @@ make_data <- function(num, anno,
             rownames(A) <- colnames(A) <- seq_len(n.sub)
         } else {
             A <- kinship
+            if (is.null(colnames(A)) | is.null(rownames(A))) {
+                stop(paste(
+                    "the kinship matrix must have",
+                    "the row and column names"))
+            }
+            if (!all(colnames(A) == rownames(A))) {
+                stop(paste(
+                    "the row and column names of",
+                    "the kiship matrix must be identical"))
+            }
+            if (!all(rownames(A) == unique(subject))) {
+                stop(paste(
+                    "the row names of",
+                    "the kiship matrix must match",
+                    "the subject"))
+            }
         }
 
         if (is.null(sigma.u)) {
@@ -150,8 +166,12 @@ make_data <- function(num, anno,
                 }
             }
 
-            # get predictors
-            g <- rep(geno, each=2) # genotype
+            # get g
+            names(geno) <- unique(subject)
+            d <- merge(anno, geno, by.x=2, by.y=0) %>%
+                `colnames<-`(c("subject", "sample", "condition", "geno"))
+            d <- d[match(anno$sample, d$sample), ]
+            g <- d$geno
 
             b1 <- ifelse(
                 m.vec[1] == 1, rnorm(n=1, mean=0, sd=sd.g), 0)
@@ -167,7 +187,7 @@ make_data <- function(num, anno,
 
             if (!ranef) {
                 y <- y.mean +
-                    rnorm(n=2 * n.sub, mean=0, sd=sigma)
+                    rnorm(n=n, mean=0, sd=sigma)
             } else if (ranef){
                 u.mean <- rep(0, n)
                 y <- y.mean +
@@ -414,7 +434,7 @@ do_bms <- function(data,
 
     if (is.null(tu.lambda)) {
         ranef <- FALSE
-    } else if (class(tu.lambda) == "list") {
+    } else if (is.list(tu.lambda)) {
         ranef <- TRUE
     } else {
         stop("`tu.lambda` has an incorrect format")
@@ -593,7 +613,7 @@ get_map <- function(data,
 
     if (is.null(tu.lambda)) {
         ranef <- FALSE
-    } else if (class(tu.lambda) == "list") {
+    } else if (is.list(tu.lambda)) {
         ranef <- TRUE
     } else {
         stop("`tu.lambda` has an incorrect format")
@@ -659,7 +679,7 @@ get_map <- function(data,
                         tu.lambda=tu.lambda,
                         method="BFGS",
                         hessian=TRUE))
-                if (class(tmp) != "try-error") break
+                if (!inherits(tmp, "try-error")) break
             }
             res.list[[i]] <- tmp
         }
@@ -849,7 +869,7 @@ get_co <- function(fit,
 
     stan.list <- fit$stan.list
 
-    if (class(stan.list[[1]]) != "stanfit") {
+    if (!inherits(stan.list[[1]], "stanfit")) {
         stop("`summary` must be set to `FALSE` when calling `do_bms()` to use this function")
     }
 

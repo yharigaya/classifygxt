@@ -26,10 +26,10 @@ simulations in the eight model categories. The model names in the
 correct order can be obtained using
 \code{\link{get_model_names}}.}
 
-\item{anno}{A data frame containing the subjects (character
-strings or integers) and the treatment conditions (0 or 1) in
-the first and second columns, respectively. The columns must be
-named as "subject" and "condition".}
+\item{anno}{A data frame containing sample IDs (character strings
+or integers), subject IDs (character strings or integers), and
+treatment conditions (0 or 1). The columns must be names as
+"sample", "subject", and "condition".}
 
 \item{fn}{A character string specifying the function. This must be
 one of "nonlinear" and "linear", corresponding to nonlinear and
@@ -57,8 +57,11 @@ deviation. If \code{ranef} is \code{TRUE}, this is set to sqrt(0.2)
 by default.}
 
 \item{kinship}{A matrix containing pairwise genetic relatedness
-between individuals. If \code{ranef} is \code{TRUE}, this is set to
-an identity matrix by default.}
+between subjects. The row and column names must match the set of
+unique elements of the "subject" column in "anno" in the
+corresponding order (i.e., \code{unique(anno$subject)}). This is
+set to \code{NULL} by default, in which case the identity matrix is
+used.}
 
 \item{seed}{A seed for RNG.}
 }

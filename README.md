@@ -1,4 +1,4 @@
-# ClassifyGxT
+# ClassifyGxT <img id="classifygxt_logo" alt="classifygxt logo" src="man/figures/classifygxt.png" align="right" width="125"/>
 
 ## About
 
@@ -18,9 +18,13 @@ Jordan M. Valone,
 Jason L. Stein,
 Michael I. Love\*,
 William Valdar\*.
-"Probabilistic classification of gene-by-treatment interactions on molecular count phenotypes."
-doi: https://doi.org/10.1101/2024.08.03.605142
-(\* These authors contributed equally to this work.)
+"Probabilistic classification of gene-by-treatment interactions on molecular count phenotypes"
+*PLoS Genetics*, 21(4): e1011561 (2025).
+[doi: 10.1371/journal.pgen.1011561](https://doi.org/10.1371/journal.pgen.1011561)
+
+\* These authors contributed equally to this work.
+
+Code for analyses in the paper can be found [here](https://github.com/yharigaya/classifygxt-paper).
 
 ## Overview
 

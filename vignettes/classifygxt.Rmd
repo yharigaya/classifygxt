@@ -1,5 +1,5 @@
 ---
-title: "ClassifyGxT - classifying gene-by-treatment interactions"
+title: "ClassifyGxT: classifying gene-by-treatment interactions"
 author: "Yuriko Harigaya, Michael Love, William Valdar"
 date: "`r format(Sys.Date())`"
 header_includes:
@@ -46,7 +46,7 @@ header_includes:
 output: rmarkdown::html_vignette
 bibliography: ref.bib
 vignette: >
-  %\VignetteIndexEntry{ClassifyGxT - classifying gene-by-treatment interactions}
+  %\VignetteIndexEntry{ClassifyGxT: classifying gene-by-treatment interactions}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -63,7 +63,7 @@ knitr::opts_chunk$set(
 The ClassifyGxT software is an implementation of a Bayesian model selection (BMS) framework for classifying GxT interactions.
 The method was developed primarily for molecular count phenotypes, such as RNA-seq and ATAC-seq data, although it can be used for other types of phenotypes.
 
-- The input is a list of feature-SNP pairs for which significant GxT interactions have been identified by the standard response molecular QTL mapping procedure (see @hipsci_consortium_shared_2018 and @matoba_stimulating_2024 for example).
+- The input is a list of feature-SNP pairs for which significant GxT interactions have been identified by the standard response molecular QTL mapping procedure (see @alasoo_shared_2018 and @matoba_stimulating_2024 for example).
 For each of the feature-SNP pairs, individual genotype and phenotype data are required.
 - The main output is the posterior probability for different GxT types. See [Overview](https://yharigaya.github.io/classifygxt/#overview) on the main page for the model categories representing the types of GxT interactions.
 - The package provides functions to process a single feature-SNP pair.
@@ -168,8 +168,10 @@ Note that the residual error standard deviation $\sigma$, which represents a typ
 The following code generates a data frame specifying the mapping between samples, subjects, and treatment conditions.
 
 ```{r}
+n.sample <- 160 # number of samples
 n.sub <- 80 # number of subjects
 anno <- data.frame(
+    sample=seq_len(n.sample),
     subject=rep(seq_len(n.sub), each=2),
     condition=rep(c(0, 1), times=n.sub))
 head(anno)

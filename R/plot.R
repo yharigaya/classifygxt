@@ -24,6 +24,21 @@ make_gp_plot <- function(gp,
     input <- gp$input
     fit <- gp$fit
 
+    # check input formats
+    t <- input$t
+    x <- input$x
+    y <- input$y
+    if (!(is.numeric(x) & is.factor(t) & is.numeric(y))) {
+        stop("`gp` has an incorrect format")
+    }
+
+    t <- fit$t
+    x <- fit$x
+    y <- fit$y
+    if (!(is.numeric(x) & is.factor(t) & is.numeric(y))) {
+        stop("`gp` has an incorrect format")
+    }
+
     set.seed(seed)
     p <- ggplot() +
         geom_jitter(
@@ -89,14 +104,14 @@ format_gp <- function(data,
     model.mat <- get_model_mat()
 
     xs <- seq(0, 2, 0.01)
-    # cols <- c(
-    #     rgb(97/255, 104/255, 108/255),
-    #     rgb(191/255, 144/255, 0/255))
 
-    # g <- data$g
-    # t <- data$t
-    # y <- data$y
-    # n <- length(y)
+    # check input formats
+    g <- data$g
+    t <- data$t
+    y <- data$y
+    if (!(is.numeric(g) & is.numeric(t) & is.numeric(y))) {
+        stop("`data` has an incorrect format")
+    }
 
     input.df <- data.frame(
         y=data$y,
@@ -119,7 +134,7 @@ format_gp <- function(data,
     pp.vec <- fit$p.m.given.y
     chosen <- pp.vec %>% which.max
 
-    if (class(fit$stan.list) == "list") {
+    if (is.list(fit$stan.list)) {
         res <- fit$stan.list[[chosen]]
         if (class(res)[1] == "stanfit") {
             res <- rstan::summary(res)$summary
@@ -136,7 +151,7 @@ format_gp <- function(data,
             y=c(y.c, y.t),
             x=rep(xs, times=2),
             t=rep(c(0, 1), each=length(xs)) %>% factor)
-    } else if (class(fit$optim.list) == "list") {
+    } else if (is.list(fit$optim.list)) {
         res <- fit$optim.list[[chosen]]
         beta <- res$par[!names(res$par) %in% c("sigma", "sigma_u")]
         # coef.vec <- paste0("b", c(0, 1:3))
